@@ -2,6 +2,6 @@ class Employee extends RealmObject
 {
 	String name;
 	int id;
-	int phoneNo;
+	long phoneNo;
 	int position;
 }
