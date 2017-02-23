@@ -12,7 +12,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import com.kitchenforhire.kitchenhire.CreateRealmObjects;
-import com.kitchenforhire.kitchenhire.User;
+import com.kitchenforhire.kitchenhire.RealmObjects.User;
 
 
 public class MainActivity extends Activity {
