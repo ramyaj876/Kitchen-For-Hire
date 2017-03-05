@@ -12,7 +12,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import com.kitchenforhire.kitchenhire.CreateRealmObjects;
-import com.kitchenforhire.kitchenhire.User;
+import com.kitchenforhire.kitchenhire.RealmObjects.User;
 
 
 public class MainActivity extends Activity {
@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Button submit = (Button) findViewById(R.id.button);
+
         submit.setOnClickListener(new View.OnClickListener(){
             public void onClick(View arg0) {
                 String name = ((EditText)findViewById(R.id.editName)).getText().toString();
