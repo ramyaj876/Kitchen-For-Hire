@@ -7,7 +7,7 @@ import io.realm.Sort;
 
 import android.util.Log;
 import android.content.Context;
-import com.kitchenforhire.kitchenhire.RealmObjects.User;
+import com.kitchenforhire.kitchenhire.RealmObjects.*;
 
 class CreateRealmObjects {
 	
@@ -38,7 +38,7 @@ class CreateRealmObjects {
 			public void execute(Realm realm) {
 				Employee newEmployee = realm.createObject(Employee.class);
 				newEmployee.name = name;
-				newEmployee.ID = ID;
+				newEmployee.id = ID;
 				newEmployee.phoneNumber = phoneNo;
 				newEmployee.position = position;
 			}
@@ -47,7 +47,7 @@ class CreateRealmObjects {
 		return E;
 	}
 
-	Bookings addBookings(final int ID, final String startTime, final String endTime, final String typeOfPackage, final String totalCost) {
+	Bookings addBookings(final int ID, final String startTime, final String endTime, final String typeOfPackage, final float totalCost) {
 		realm.executeTransaction(new Realm.Transaction() {
 			@Override
 			public void execute(Realm realm) {
@@ -88,31 +88,55 @@ class CreateRealmObjects {
 		return A;
 	}
 
-	Ingredients addIngredients(final String name, final String unit, final String unitQuantity) {
+	Ingredients findIngredient(final String name)
+	{	//returns ingredient if found, otherwise returns null
+		RealmResults<Ingredients> reqIngredient = realm.where(Ingredients.class).equalTo("Ingredients.name", name).findAll();
+		if (reqIngredient.size() != 0)
+			return reqIngredient.first();
+		else
+			return null;
+	}
+
+	Ingredients addNewIngredientToRecipe(final String name, final String unit, final String unitQuantity, final Recipe newRecipe) {
+		//creating a new ingredient in the database
 		realm.executeTransaction(new Realm.Transaction() {
 			@Override
 			public void execute(Realm realm) {
-				Ingredients newIngredients = realm.createObject(Ingredients.class);
-				newIngredients.name = name;
-				newIngredients.unit = unit;
-				newIngredients.unitQuantity = unitQuantity;
+				Ingredients newIngredient = realm.createObject(Ingredients.class);
+				newIngredient.name = name;
+				newIngredient.unit = unit;
+				newIngredient.unitQuantity = unitQuantity;
+
+				//adding to a recipe
+				newRecipe.ingredients.add(newIngredient);
 			}
 		});
 		final Ingredients I = realm.where(Ingredients.class).findFirst();
 		return I;
 	}
 
-	Recipe addRecipe(final String name, final String type, final float cost) {
+	Recipe addIngredientToRecipe(final Recipe newRecipe, final Ingredients reqIngredient)
+	{
 		realm.executeTransaction(new Realm.Transaction() {
 			@Override
 			public void execute(Realm realm) {
-				Recipe newRecipe = realm.createObject(Ingredients.class);
+				newRecipe.ingredients.add(reqIngredient);
+			}
+		});
+		return newRecipe;
+	}
+
+	Recipe addRecipe(final String name, final String type, final float cost) {
+		final Recipe newRecipe = realm.createObject(Recipe.class);
+		realm.executeTransaction(new Realm.Transaction() {
+			@Override
+			public void execute(Realm realm) {
 				newRecipe.name = name;
 				newRecipe.type = type;
 				newRecipe.cost = cost;
 			}
 		});
-		final Recipe R = realm.where(Recipe.class).findFirst();
-		return R;
+		final Recipe r = realm.where(Recipe.class).findFirst();
+		return newRecipe;
 	}
 }

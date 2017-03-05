@@ -2,7 +2,7 @@ package com.kitchenforhire.kitchenhire.RealmObjects;
 
 import io.realm.RealmObject;
 
-class Bookings extends RealmObject
+public class Bookings extends RealmObject
 {
 	public int ID;
 	public String startTime;
